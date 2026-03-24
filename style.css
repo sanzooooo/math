@@ -130,6 +130,9 @@ button:active {
 }
 
 /* レベル選択画面 */
+#level-select-screen {
+    justify-content: center; /* 縦方向の中央に配置 */
+}
 #level-select-screen .level-list {
     display: flex;
     flex-direction: column;
