@@ -309,4 +309,14 @@ button:active {
     .message-area {
         font-size: 1.2rem;
     }
+    
+    #level-select-screen .level-list {
+        width: 95%; /* スマホでは横幅を広く確保する */
+    }
+    .btn-level {
+        font-size: 1.05rem; /* テキストを少し縮小 */
+        padding: 16px 5px; /* 指で押しやすいように縦幅キープ */
+        margin: 10px 0; /* 左右の無駄なマージンを消す */
+        white-space: nowrap; /* 途中で改行させない */
+    }
 }
