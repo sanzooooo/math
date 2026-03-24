@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>暗算クエスト</title>
+    <link rel="stylesheet" href="style.css?v=6">
+</head>
+<body>
+    <div id="game-container">
+        
+        <!-- タイトル画面 -->
+        <div id="title-screen" class="screen active">
+            <div class="window">
+                <h1>暗算クエスト</h1>
+                <p style="text-align: center;">〜 計算で魔物を討伐せよ 〜</p>
+            </div>
+            <button id="btn-start" style="margin-top: 40px;">冒険に出る</button>
+        </div>
+
+        <!-- レベル選択画面 -->
+        <div id="level-select-screen" class="screen">
+            <div class="window" style="margin-bottom: 20px;">
+                <h2>難易度を選ぶのじゃ</h2>
+            </div>
+            <div class="level-list">
+                <button class="btn-level" data-level="easy">イージー（初級モンスター）</button>
+                <button class="btn-level" data-level="normal">ノーマル（中級モンスター）</button>
+                <button class="btn-level" data-level="hard">ハード（上級モンスター）</button>
+                <button class="btn-level" data-level="super-hard">超ハード（魔王級）</button>
+            </div>
+        </div>
+
+        <!-- バトル画面 -->
+        <div id="battle-screen" class="screen">
+            <!-- 上部ステータス -->
+            <div class="status-bar">
+                <div class="window status-box tooltip">
+                    <div id="player-status">
+                        ゆうしゃ<br>
+                        ＨＰ：<span id="player-hp">3</span>/3
+                    </div>
+                </div>
+                <div class="window status-box tooltip">
+                    <div id="enemy-status">
+                        <span id="enemy-name">スライム</span><br>
+                        ＨＰ：<span id="enemy-hp">10</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 敵画像と残り時間 -->
+            <div class="enemy-area">
+                <div id="enemy-sprite" class="enemy-image">👻</div>
+                <div class="timer-bar-container">
+                    <div id="timer-bar" class="timer-bar"></div>
+                </div>
+            </div>
+
+            <!-- 問題表示と選択肢 -->
+            <div class="window bottom-window">
+                <div id="message-area" class="message-area">まものが あらわれた！</div>
+                <div id="question-area" class="question-area" style="display:none;">
+                    ? + ? =
+                </div>
+                <div id="choices-area" class="choices" style="display:none;">
+                    <button class="btn-choice" data-index="0">1</button>
+                    <button class="btn-choice" data-index="1">2</button>
+                    <button class="btn-choice" data-index="2">3</button>
+                </div>
+            </div>
+            <button id="btn-next-question" style="display:none; margin: 10px auto;">次の問題へ</button>
+        </div>
+
+        <!-- リザルト（結果）画面 -->
+        <div id="result-screen" class="screen">
+            <div class="window" style="width: 80%; text-align: center;">
+                <h2 id="result-title">討伐成功！</h2>
+                <p id="result-message">魔物を倒した！</p>
+                <br>
+                <button id="btn-return-title">タイトルへ戻る</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
