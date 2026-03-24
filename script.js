@@ -118,7 +118,7 @@ function nextTurn() {
     elQuestionArea.textContent = q.text;
 
     // 選択肢を生成
-    const choices = generateChoices(q.answer);
+    const choices = generateChoices(q.answer, q.progress);
     const choiceButtons = document.querySelectorAll('.btn-choice');
     choices.forEach((num, index) => {
         choiceButtons[index].textContent = num;
@@ -138,23 +138,39 @@ function generateQuestion() {
     let progress = 11 - state.enemyHP; // 1〜10
 
     if (state.level === 'easy') {
-        if (progress <= 5) {
-            num1 = getRandom(1, 9);
-            num2 = getRandom(1, 9);
+        if (progress <= 3) {
+            num1 = getRandom(1, 5);
+            num2 = getRandom(1, 5);
             operator = '+';
+        } else if (progress <= 6) {
+            num1 = getRandom(2, 9);
+            num2 = getRandom(2, 9);
+            operator = '+';
+        } else if (progress <= 8) {
+            num1 = getRandom(11, 19);
+            num2 = getRandom(1, num1 % 10 === 0 ? 1 : num1 % 10); // 繰り下がりなし
+            operator = '-';
         } else {
-            num1 = getRandom(10, 19);
-            num2 = getRandom(1, 9);
+            num1 = getRandom(11, 18);
+            num2 = getRandom((num1 % 10) + 1, 9); // 繰り下がりあり
             operator = '-';
         }
     } else if (state.level === 'normal') {
-        if (progress <= 5) {
-            num1 = getRandom(10, 50);
+        if (progress <= 3) {
+            num1 = getRandom(10, 49);
+            num2 = getRandom(1, 9);
+            operator = '+';
+        } else if (progress <= 6) {
+            num1 = getRandom(20, 50);
+            num2 = getRandom(1, 9);
+            operator = '-';
+        } else if (progress <= 8) {
+            num1 = getRandom(10, 49);
             num2 = getRandom(10, 49);
             operator = '+';
         } else {
-            num1 = getRandom(30, 99);
-            num2 = getRandom(10, 29);
+            num1 = getRandom(50, 99);
+            num2 = getRandom(10, 49);
             operator = '-';
         }
     } else if (state.level === 'hard') {
@@ -163,26 +179,34 @@ function generateQuestion() {
             num2 = getRandom(10, 99);
             operator = '+';
         } else if (progress <= 6) {
+            num1 = getRandom(10, 30);
+            num2 = getRandom(2, 5);
+            operator = '×';
+        } else if (progress <= 8) {
             num1 = getRandom(200, 999);
             num2 = getRandom(100, 199);
             operator = '-';
         } else {
-            num1 = getRandom(10, 99);
-            num2 = getRandom(2, 9);
+            num1 = getRandom(11, 99);
+            num2 = getRandom(3, 9);
             operator = '×';
         }
     } else if (state.level === 'super-hard') {
         if (progress <= 3) {
             num1 = getRandom(100, 999);
-            num2 = getRandom(2, 9);
-            operator = '×';
-        } else if (progress <= 7) {
-            num1 = getRandom(10, 99);
-            num2 = getRandom(10, 99);
+            num2 = getRandom(100, 999);
+            operator = '+';
+        } else if (progress <= 6) {
+            num1 = getRandom(200, 999);
+            num2 = getRandom(100, 199);
+            operator = '-';
+        } else if (progress <= 8) {
+            num1 = getRandom(11, 50);
+            num2 = getRandom(11, 20);
             operator = '×';
         } else {
             num1 = getRandom(100, 999);
-            num2 = getRandom(10, 99);
+            num2 = getRandom(3, 9);
             operator = '×';
         }
     }
@@ -192,18 +216,25 @@ function generateQuestion() {
     if (operator === '-') answer = num1 - num2;
     if (operator === '×') answer = num1 * num2; 
 
-    return { text: `${num1} ${operator} ${num2} = ?`, answer: answer };
+    return { text: `${num1} ${operator} ${num2} = ?`, answer: answer, progress: progress };
 }
 
-function generateChoices(correctAnswer) {
+function generateChoices(correctAnswer, progress) {
     let choices = [correctAnswer];
     while(choices.length < 3) {
-        let offset = getRandom(1, 10) * (getRandom(0, 1) === 0 ? 1 : -1);
-        if (correctAnswer > 100) offset = getRandom(10, 50) * (getRandom(0, 1) === 0 ? 1 : -1);
-        if (correctAnswer > 1000) offset = getRandom(100, 500) * (getRandom(0, 1) === 0 ? 1 : -1);
+        let offset;
+        // 10問中3問 (例: 4問目, 7問目, 9問目) は、1の位が同じになるように10の倍数でズラす
+        if (progress === 4 || progress === 7 || progress === 9) {
+            offset = getRandom(1, 5) * 10 * (getRandom(0, 1) === 0 ? 1 : -1);
+            if (correctAnswer <= 10) offset = getRandom(1, 3) * 10;
+        } else {
+            offset = getRandom(1, 10) * (getRandom(0, 1) === 0 ? 1 : -1);
+            if (correctAnswer > 100) offset = getRandom(10, 50) * (getRandom(0, 1) === 0 ? 1 : -1);
+            if (correctAnswer > 1000) offset = getRandom(100, 500) * (getRandom(0, 1) === 0 ? 1 : -1);
+        }
         
         let fake = correctAnswer + offset;
-        if (fake < 0) fake = Math.abs(fake); 
+        if (fake <= 0) fake = correctAnswer + Math.abs(offset); 
         if (!choices.includes(fake)) choices.push(fake);
     }
     choices.sort(() => Math.random() - 0.5);

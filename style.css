@@ -234,6 +234,10 @@ button:active {
     justify-content: center;
     align-items: center;
 }
+.result-window {
+    width: 80%;
+    text-align: center;
+}
 #result-screen h2 {
     font-size: 2.5rem;
 }
@@ -310,9 +314,16 @@ button:active {
         font-size: 1.2rem;
     }
     
-    #level-select-screen .level-list {
+    #level-select-screen .level-list,
+    .result-window {
         width: 95%; /* スマホでは横幅を広く確保する */
     }
+    
+    #result-screen h2 {
+        font-size: 1.8rem;
+        white-space: nowrap; /* 強制1行 */
+    }
+    
     .btn-level {
         font-size: 1.05rem; /* テキストを少し縮小 */
         padding: 16px 5px; /* 指で押しやすいように縦幅キープ */
