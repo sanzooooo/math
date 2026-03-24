@@ -396,10 +396,16 @@ function removeBackgroundFloodFill(src) {
             ctx.drawImage(img, 0, 0);
             const imageData = ctx.getImageData(0, 0, w, h);
             const data = imageData.data;
-            const threshold = 15;
+            const bgR = data[0];
+            const bgG = data[1];
+            const bgB = data[2];
+            const threshold = 20;
             const isBg = (x, y) => {
                 const idx = (y * w + x) * 4;
-                return data[idx] <= threshold && data[idx+1] <= threshold && data[idx+2] <= threshold && data[idx+3] > 0;
+                return Math.abs(data[idx] - bgR) <= threshold && 
+                       Math.abs(data[idx+1] - bgG) <= threshold && 
+                       Math.abs(data[idx+2] - bgB) <= threshold && 
+                       data[idx+3] > 0;
             };
             const visited = new Uint8Array(w * h);
             const stack = [];
