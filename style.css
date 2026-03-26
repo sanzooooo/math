@@ -2,6 +2,7 @@
 
 html, body {
     height: 100%;
+    height: -webkit-fill-available; /* 最新版以外のSafariにも確実に対応 */
     height: 100svh; /* Safari等のブラウザバーを避ける */
     margin: 0;
     padding: 0;
