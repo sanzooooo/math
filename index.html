@@ -63,11 +63,16 @@
                 <div id="question-area" class="question-area" style="display:none;">
                     ? + ? =
                 </div>
-                <div id="choices-area" class="choices" style="display:none;">
-                    <button class="btn-choice" data-index="0">1</button>
-                    <button class="btn-choice" data-index="1">2</button>
-                    <button class="btn-choice" data-index="2">3</button>
-                </div>
+                <div id="choices-area" class="choices">
+                <button class="btn-choice">1</button>
+                <button class="btn-choice">2</button>
+                <button class="btn-choice">3</button>
+            </div>
+
+            <div id="input-area" class="input-container" style="display: none;">
+                <input type="tel" id="answer-input" placeholder="こたえを入力" autocomplete="off">
+                <button id="btn-submit-answer" class="btn-action">こうげき！</button>
+            </div>
             </div>
             <button id="btn-next-question" style="display:none; margin: 10px auto;">次の問題へ</button>
         </div>
@@ -84,6 +89,6 @@
 
     </div>
 
-    <script src="script.js?v=3"></script>
+    <script src="script.js?v=6"></script>
 </body>
 </html>

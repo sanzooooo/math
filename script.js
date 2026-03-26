@@ -32,6 +32,9 @@ const elEnemySprite = document.getElementById('enemy-sprite');
 const elMessageArea = document.getElementById('message-area');
 const elQuestionArea = document.getElementById('question-area');
 const elChoicesArea = document.getElementById('choices-area');
+const elInputArea = document.getElementById('input-area');
+const elAnswerInput = document.getElementById('answer-input');
+const elBtnSubmitAnswer = document.getElementById('btn-submit-answer');
 const elTimerBar = document.getElementById('timer-bar');
 const elResultTitle = document.getElementById('result-title');
 const elResultMessage = document.getElementById('result-message');
@@ -56,6 +59,12 @@ function init() {
             if (!state.isAnswering) return;
             handleAnswer(parseInt(e.target.textContent));
         });
+    });
+
+    // 記述式入力ボタンとエンターキー
+    document.getElementById('btn-submit-answer').addEventListener('click', submitInputAnswer);
+    document.getElementById('answer-input').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') submitInputAnswer();
     });
 
     document.getElementById('btn-next-question').addEventListener('click', () => {
@@ -92,6 +101,7 @@ function startGame(levelKey) {
     elMessageArea.textContent = `${enemyData.name} が あらわれた！`;
     elQuestionArea.style.display = 'none';
     elChoicesArea.style.display = 'none';
+    elInputArea.style.display = 'none';
     document.getElementById('btn-next-question').style.display = 'none';
     
     setTimeout(() => {
@@ -110,20 +120,33 @@ function nextTurn() {
     document.getElementById('btn-next-question').style.display = 'none';
     elMessageArea.style.display = 'none';
     elQuestionArea.style.display = 'block';
-    elChoicesArea.style.display = 'flex';
     
     // 問題を生成
     const q = generateQuestion();
     state.currentCorrectAnswer = q.answer;
     elQuestionArea.textContent = q.text;
 
-    // 選択肢を生成
-    const choices = generateChoices(q.answer, q.progress);
-    const choiceButtons = document.querySelectorAll('.btn-choice');
-    choices.forEach((num, index) => {
-        choiceButtons[index].textContent = num;
-        choiceButtons[index].disabled = false;
-    });
+    // 選択肢または入力エリアの表示制御
+    if (state.enemyHP <= 2) {
+        // 全レベル共通：残りHP2以下（9、10問目）は記述式
+        elChoicesArea.style.display = 'none';
+        elInputArea.style.display = 'flex';
+        elAnswerInput.disabled = false;
+        elBtnSubmitAnswer.disabled = false;
+        elAnswerInput.value = '';
+        setTimeout(() => elAnswerInput.focus(), 100);
+    } else {
+        // 通常は3択
+        elChoicesArea.style.display = 'flex';
+        elInputArea.style.display = 'none';
+        
+        const choices = generateChoices(q.answer, q.progress);
+        const choiceButtons = document.querySelectorAll('.btn-choice');
+        choices.forEach((num, index) => {
+            choiceButtons[index].textContent = num;
+            choiceButtons[index].disabled = false;
+        });
+    }
 
     state.isAnswering = true;
     startTimer();
@@ -285,12 +308,21 @@ function stopTimer() {
     if (state.timerInterval) clearInterval(state.timerInterval);
 }
 
+function submitInputAnswer() {
+    if (!state.isAnswering) return;
+    const val = parseInt(elAnswerInput.value, 10);
+    if (isNaN(val)) return; // 未入力や無効な値は無視
+    handleAnswer(val);
+}
+
 function handleAnswer(selectedNumber) {
     if (!state.isAnswering) return;
     state.isAnswering = false;
     stopTimer();
 
     document.querySelectorAll('.btn-choice').forEach(btn => btn.disabled = true);
+    elAnswerInput.disabled = true;
+    elBtnSubmitAnswer.disabled = true;
 
     if (selectedNumber === state.currentCorrectAnswer) {
         state.enemyHP--;
@@ -311,6 +343,8 @@ function handleTimeout() {
     state.isAnswering = false;
     
     document.querySelectorAll('.btn-choice').forEach(btn => btn.disabled = true);
+    elAnswerInput.disabled = true;
+    elBtnSubmitAnswer.disabled = true;
     playerDamageMessage(true);
 }
 

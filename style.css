@@ -215,6 +215,37 @@ button:active {
     padding: 10px 0;
 }
 
+.input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+#answer-input {
+    font-size: 2rem;
+    font-family: inherit;
+    padding: 10px;
+    width: 60%;
+    max-width: 200px;
+    text-align: center;
+    border: 4px solid #fff;
+    border-radius: 10px;
+    background: #000;
+    color: #fff;
+    outline: none;
+}
+
+#answer-input:focus {
+    border-color: #ffff00;
+}
+
+#btn-submit-answer {
+    font-size: 1.5rem;
+    padding: 10px;
+    white-space: nowrap;
+}
+
 .timer-bar-container {
     width: 80%;
     height: 12px;
