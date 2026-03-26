@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=DotGothic16&display=swap');
 
+html, body {
+    height: 100%;
+    height: 100svh; /* Safari等のブラウザバーを避ける */
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* 全体スクロールを禁止 */
+}
+
 body {
     background-color: #222;
     color: #fff;
@@ -7,8 +15,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
     transition: background 0.5s, background-color 0.5s;
@@ -18,7 +24,7 @@ body {
     width: 600px;
     max-width: 100%;
     height: 680px;
-    max-height: 100vh;
+    max-height: 100%;
     position: relative;
     border: 4px solid #fff;
     border-radius: 8px;
@@ -319,10 +325,19 @@ button:active {
         border: none;
         border-radius: 0;
         box-shadow: none;
-        height: 100vh;
+        height: 100%;
+    }
+    .screen {
+        padding: 10px;
+        padding-bottom: 20px; /* iPhoneの下枠を考慮 */
     }
     .window {
         padding: 10px;
+    }
+    .bottom-window {
+        min-height: auto;
+        padding-top: 10px;
+        padding-bottom: 10px;
     }
     h1 {
         font-size: 2rem !important;
@@ -338,7 +353,7 @@ button:active {
     }
     .choices button {
         font-size: 1.4rem;
-        padding: 16px 0; /* タッチしやすいように縦幅増やす */
+        padding: 12px 0; /* 大きすぎてはみ出すのを防止 */
         margin: 0 5px;
     }
     .message-area {
